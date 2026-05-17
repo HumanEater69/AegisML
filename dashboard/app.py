@@ -1233,103 +1233,103 @@ elif page_key == "oracle":
             st.markdown('</div>', unsafe_allow_html=True)
 
         with o2:
-        if analyze_btn:
-            import requests
-            
-            payload = {
-                "TransactionAmt": amt,
-                "HourOfDay": hour,
-                "DistanceKM": dist,
-                "DeviceType": device,
-                "IsNewDevice": is_new_device,
-                "FailedLogins": failed_logins
-            }
-            
-            with st.spinner("QUANTUM ENGINE PROCESSING..."):
-                try:
-                    res = requests.post("http://localhost:8080/api/v1/predict/quantum", json=payload, timeout=5)
-                    if res.status_code == 200:
-                        data = res.json()
-                        prob = data.get("fraud_capacity_percentage", 0.0) / 100.0
-                        tier = data.get("risk_tier", "Clear")
-                        intel = data.get("cyber_threat_intelligence", {})
-                        action = data.get("action_protocol", "No action needed.")
-                        
-                        tier_html = {
-                            'Critical':   '<span class="clay-badge clay-critical" style="font-size:1.2rem;">● CRITICAL</span>',
-                            'Suspicious': '<span class="clay-badge clay-suspicious" style="font-size:1.2rem;">◆ SUSPICIOUS</span>',
-                            'Clear':      '<span class="clay-badge clay-clear" style="font-size:1.2rem;">✓ CLEAR</span>',
-                        }
-                        
-                        gauge_color = '#ff2d55' if tier=='Critical' else '#ffd60a' if tier=='Suspicious' else '#00ff88'
-                        
-                        # Gauge Chart for Probability
-                        fig_gauge = go.Figure(go.Indicator(
-                            mode="gauge+number",
-                            value=prob * 100,
-                            number={'suffix': "%", 'font': {'size': 50, 'family': 'Orbitron', 'color': gauge_color}},
-                            title={'text': "FRAUD CAPACITY", 'font': {'size': 14, 'family': 'Rajdhani', 'color': 'rgba(255,255,255,0.6)'}},
-                            gauge={
-                                'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "rgba(255,255,255,0.2)"},
-                                'bar': {'color': gauge_color},
-                                'bgcolor': "rgba(0,0,0,0.5)",
-                                'borderwidth': 2,
-                                'bordercolor': "rgba(255,255,255,0.1)",
-                                'steps': [
-                                    {'range': [0, 40], 'color': "rgba(0,255,136,0.1)"},
-                                    {'range': [40, 80], 'color': "rgba(255,214,10,0.1)"},
-                                    {'range': [80, 100], 'color': "rgba(255,45,85,0.1)"}],
+            if analyze_btn:
+                import requests
+                
+                payload = {
+                    "TransactionAmt": amt,
+                    "HourOfDay": hour,
+                    "DistanceKM": dist,
+                    "DeviceType": device,
+                    "IsNewDevice": is_new_device,
+                    "FailedLogins": failed_logins
+                }
+                
+                with st.spinner("QUANTUM ENGINE PROCESSING..."):
+                    try:
+                        res = requests.post("http://localhost:8080/api/v1/predict/quantum", json=payload, timeout=5)
+                        if res.status_code == 200:
+                            data = res.json()
+                            prob = data.get("fraud_capacity_percentage", 0.0) / 100.0
+                            tier = data.get("risk_tier", "Clear")
+                            intel = data.get("cyber_threat_intelligence", {})
+                            action = data.get("action_protocol", "No action needed.")
+                            
+                            tier_html = {
+                                'Critical':   '<span class="clay-badge clay-critical" style="font-size:1.2rem;">● CRITICAL</span>',
+                                'Suspicious': '<span class="clay-badge clay-suspicious" style="font-size:1.2rem;">◆ SUSPICIOUS</span>',
+                                'Clear':      '<span class="clay-badge clay-clear" style="font-size:1.2rem;">✓ CLEAR</span>',
                             }
-                        ))
-                        fig_gauge.update_layout(height=250, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor='rgba(0,0,0,0)', font={'color': 'white', 'family': 'JetBrains Mono'})
-
-                        st.markdown(f"""
-                        <div class="glass-card" style="border: 2px solid {gauge_color};">
-                          <div style="display:flex; justify-content:space-between; align-items:center;">
-                            <div style="width: 100%;">
-                        """, unsafe_allow_html=True)
-                        st.plotly_chart(fig_gauge, use_container_width=True)
-                        st.markdown(f"""
-                            </div>
-                          </div>
-                          <div style="text-align:center; margin-top:-20px; margin-bottom:20px;">{tier_html.get(tier, tier)}</div>
-                          
-                          <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.1);">
-                          
-                          <div class="section-label" style="color:#00f5ff;">CYBER THREAT INTELLIGENCE</div>
-                          <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
-                            <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
-                              <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Dark Web Exposure Index:</span><br>
-                              <div style="margin-top:8px; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;">
-                                <div style="height:100%; width:{intel.get('dark_web_exposure_index', 0)*100}%; background:#b44fff; border-radius:3px; box-shadow:0 0 10px #b44fff;"></div>
+                            
+                            gauge_color = '#ff2d55' if tier=='Critical' else '#ffd60a' if tier=='Suspicious' else '#00ff88'
+                            
+                            # Gauge Chart for Probability
+                            fig_gauge = go.Figure(go.Indicator(
+                                mode="gauge+number",
+                                value=prob * 100,
+                                number={'suffix': "%", 'font': {'size': 50, 'family': 'Orbitron', 'color': gauge_color}},
+                                title={'text': "FRAUD CAPACITY", 'font': {'size': 14, 'family': 'Rajdhani', 'color': 'rgba(255,255,255,0.6)'}},
+                                gauge={
+                                    'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "rgba(255,255,255,0.2)"},
+                                    'bar': {'color': gauge_color},
+                                    'bgcolor': "rgba(0,0,0,0.5)",
+                                    'borderwidth': 2,
+                                    'bordercolor': "rgba(255,255,255,0.1)",
+                                    'steps': [
+                                        {'range': [0, 40], 'color': "rgba(0,255,136,0.1)"},
+                                        {'range': [40, 80], 'color': "rgba(255,214,10,0.1)"},
+                                        {'range': [80, 100], 'color': "rgba(255,45,85,0.1)"}],
+                                }
+                            ))
+                            fig_gauge.update_layout(height=250, margin=dict(l=20, r=20, t=50, b=20), paper_bgcolor='rgba(0,0,0,0)', font={'color': 'white', 'family': 'JetBrains Mono'})
+    
+                            st.markdown(f"""
+                            <div class="glass-card" style="border: 2px solid {gauge_color};">
+                              <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div style="width: 100%;">
+                            """, unsafe_allow_html=True)
+                            st.plotly_chart(fig_gauge, use_container_width=True)
+                            st.markdown(f"""
+                                </div>
                               </div>
-                              <span style="color:white; font-family:'Orbitron'; font-size:1rem; display:block; margin-top:4px;">{intel.get('dark_web_exposure_index', 0)*100:.1f}%</span>
+                              <div style="text-align:center; margin-top:-20px; margin-bottom:20px;">{tier_html.get(tier, tier)}</div>
+                              
+                              <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.1);">
+                              
+                              <div class="section-label" style="color:#00f5ff;">CYBER THREAT INTELLIGENCE</div>
+                              <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;">
+                                <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
+                                  <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Dark Web Exposure Index:</span><br>
+                                  <div style="margin-top:8px; height:6px; background:rgba(255,255,255,0.1); border-radius:3px;">
+                                    <div style="height:100%; width:{intel.get('dark_web_exposure_index', 0)*100}%; background:#b44fff; border-radius:3px; box-shadow:0 0 10px #b44fff;"></div>
+                                  </div>
+                                  <span style="color:white; font-family:'Orbitron'; font-size:1rem; display:block; margin-top:4px;">{intel.get('dark_web_exposure_index', 0)*100:.1f}%</span>
+                                </div>
+                                <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
+                                  <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Geo-Velocity Alert:</span><br>
+                                  <span style="color:{'#ff2d55' if intel.get('geo_velocity_alert') != 'Normal' else '#00ff88'}; font-family:'JetBrains Mono'; font-size:1rem;">{intel.get('geo_velocity_alert', 'Normal')}</span>
+                                </div>
+                              </div>
+                              
+                              <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; margin-top:10px;">
+                                  <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Syndicate Link Nodes (Graph Distance):</span><br>
+                                  <span style="color:rgba(255,255,255,0.5); font-family:'JetBrains Mono'; font-size:0.8rem;">{ ' / '.join(intel.get('syndicate_link_nodes', ['CLEAN_NETWORK'])) }</span>
+                              </div>
+    
+                              <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.1);">
+                              
+                              <div class="section-label" style="color:#ff6b2b;">RESOLUTION PLAN</div>
+                              <div style="font-family:'JetBrains Mono'; font-size:1rem; color:white; background:rgba(255,107,43,0.1); padding:15px; border-left:3px solid #ff6b2b; border-radius:0 8px 8px 0;">
+                                {action}
+                              </div>
                             </div>
-                            <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px;">
-                              <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Geo-Velocity Alert:</span><br>
-                              <span style="color:{'#ff2d55' if intel.get('geo_velocity_alert') != 'Normal' else '#00ff88'}; font-family:'JetBrains Mono'; font-size:1rem;">{intel.get('geo_velocity_alert', 'Normal')}</span>
-                            </div>
-                          </div>
-                          
-                          <div style="background:rgba(0,0,0,0.4); padding:10px; border-radius:8px; margin-top:10px;">
-                              <span style="color:#b44fff; font-family:'JetBrains Mono'; font-size:0.8rem;">Syndicate Link Nodes (Graph Distance):</span><br>
-                              <span style="color:rgba(255,255,255,0.5); font-family:'JetBrains Mono'; font-size:0.8rem;">{ ' / '.join(intel.get('syndicate_link_nodes', ['CLEAN_NETWORK'])) }</span>
-                          </div>
-
-                          <hr style="margin: 15px 0; border-color: rgba(255,255,255,0.1);">
-                          
-                          <div class="section-label" style="color:#ff6b2b;">RESOLUTION PLAN</div>
-                          <div style="font-family:'JetBrains Mono'; font-size:1rem; color:white; background:rgba(255,107,43,0.1); padding:15px; border-left:3px solid #ff6b2b; border-radius:0 8px 8px 0;">
-                            {action}
-                          </div>
-                        </div>
-                        """, unsafe_allow_html=True)
-                    else:
-                        st.error(f"API Error: {res.status_code}")
-                except Exception as e:
-                    st.error(f"Failed to connect to Oracle API on port 8080: {e}")
-        else:
-            st.info("👈 Enter parameters and initiate scan.")
+                            """, unsafe_allow_html=True)
+                        else:
+                            st.error(f"API Error: {res.status_code}")
+                    except Exception as e:
+                        st.error(f"Failed to connect to Oracle API on port 8080: {e}")
+            else:
+                st.info("👈 Enter parameters and initiate scan.")
 
     with tab2:
         st.markdown('<div class="glass-card" style="margin-top: 20px;">', unsafe_allow_html=True)
