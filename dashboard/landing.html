@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AegisML | Cyber Command Startup</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS via CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Three.js for 3D Background Animation -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "background": "#131313",
+                        "surface-tint": "#00dce5",
+                        "on-tertiary-container": "#007138",
+                        "surface-container-high": "#2a2a2a",
+                        "on-tertiary-fixed-variant": "#005228",
+                        "secondary-fixed": "#ffdada",
+                        "tertiary-fixed": "#60ff99",
+                        "surface-container-lowest": "#0e0e0e",
+                        "inverse-primary": "#00696e",
+                        "surface-dim": "#131313",
+                        "primary-fixed": "#63f7ff",
+                        "secondary-fixed-dim": "#ffb3b5",
+                        "on-secondary-fixed-variant": "#920027",
+                        "on-primary-fixed": "#002021",
+                        "tertiary": "#edffec",
+                        "secondary": "#ffb3b5",
+                        "on-tertiary-fixed": "#00210c",
+                        "primary-container": "#00f5ff",
+                        "on-secondary-container": "#fff1f1",
+                        "on-surface-variant": "#b9caca",
+                        "surface-variant": "#353534",
+                        "surface": "#131313",
+                        "on-primary-fixed-variant": "#004f53",
+                        "on-tertiary": "#003919",
+                        "primary": "#e9feff",
+                        "on-surface": "#e5e2e1",
+                        "error": "#ffb4ab",
+                        "tertiary-fixed-dim": "#00e479",
+                        "inverse-on-surface": "#313030",
+                        "secondary-container": "#de0541",
+                        "on-primary-container": "#006c71",
+                        "inverse-surface": "#e5e2e1",
+                        "outline-variant": "#3a494a",
+                        "surface-container-highest": "#353534",
+                        "surface-bright": "#3a3939",
+                        "on-primary": "#003739",
+                        "surface-container": "#201f1f",
+                        "on-secondary-fixed": "#40000c",
+                        "on-secondary": "#680019",
+                        "surface-container-low": "#1c1b1b",
+                        "on-error": "#690005",
+                        "primary-fixed-dim": "#00dce5",
+                        "tertiary-container": "#00fe87",
+                        "outline": "#849495",
+                        "error-container": "#93000a",
+                        "on-error-container": "#ffdad6",
+                        "on-background": "#e5e2e1"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    spacing: {
+                        "unit": "4px",
+                        "gutter": "24px",
+                        "widget-gap": "32px",
+                        "margin-desktop": "48px",
+                        "margin-mobile": "16px"
+                    },
+                    fontFamily: {
+                        "headline-xl": ["Space Grotesk"],
+                        "data-num": ["JetBrains Mono"],
+                        "headline-lg-mobile": ["Space Grotesk"],
+                        "headline-md": ["Space Grotesk"],
+                        "headline-lg": ["Space Grotesk"],
+                        "body-lg": ["JetBrains Mono"],
+                        "body-md": ["JetBrains Mono"],
+                        "label-caps": ["JetBrains Mono"]
+                    },
+                    fontSize: {
+                        "headline-xl": ["48px", { lineHeight: "56px", letterSpacing: "0.05em", fontWeight: "700" }],
+                        "data-num": ["14px", { lineHeight: "20px", fontWeight: "500" }],
+                        "headline-lg-mobile": ["24px", { lineHeight: "32px", fontWeight: "600" }],
+                        "headline-md": ["24px", { lineHeight: "32px", fontWeight: "500" }],
+                        "headline-lg": ["32px", { lineHeight: "40px", letterSpacing: "0.02em", fontWeight: "600" }],
+                        "body-lg": ["18px", { lineHeight: "28px", fontWeight: "400" }],
+                        "body-md": ["14px", { lineHeight: "22px", fontWeight: "400" }],
+                        "label-caps": ["12px", { lineHeight: "16px", letterSpacing: "0.1em", fontWeight: "700" }]
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        scanline: {
+                            '0%': { transform: 'translateY(-100%)' },
+                            '100%': { transform: 'translateY(100%)' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: 0.8, filter: 'drop-shadow(0 0 15px rgba(0,220,229,0.5))' },
+                            '50%': { opacity: 1, filter: 'drop-shadow(0 0 35px rgba(0,220,229,0.9))' }
+                        },
+                        typewriter: {
+                            from: { width: '0' },
+                            to: { width: '100%' }
+                        },
+                        blinkCursor: {
+                            'from, to': { borderColor: 'transparent' },
+                            '50%': { borderColor: '#60ff99' } /* tertiary-fixed */
+                        },
+                        ripple: {
+                            'to': { transform: 'scale(4)', opacity: '0' }
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'scanline': 'scanline 8s linear infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'ripple': 'ripple 0.6s linear'
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Custom Utilities for HUD effects */
+        .glass-panel {
+            @apply bg-surface-tint/[0.02] backdrop-blur-[20px] border border-white/10 relative overflow-hidden;
+        }
+        .glass-sheen::before {
+            content: '';
+            @apply absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none;
+        }
+        .text-glow-primary {
+            text-shadow: 0 0 10px rgba(99,247,255,0.5);
+        }
+        .text-glow-cyan {
+            text-shadow: 0 0 15px rgba(0,220,229,0.8);
+        }
+        .clay-button {
+            box-shadow: inset 0 0 10px rgba(0,220,229,0.2), 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .clay-button:active {
+            box-shadow: inset 0 4px 15px rgba(0,220,229,0.4), 0 2px 10px rgba(0,0,0,0.5);
+        }
+        
+        /* Particle setup */
+        #particles-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            background: #00dce5;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-up linear infinite;
+        }
+        @keyframes float-up {
+            to { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Ripple effect */
+        span.ripple {
+            position: absolute;
+            border-radius: 50%;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            background-color: rgba(99, 247, 255, 0.4);
+        }
+
+        /* Global Hover Transitions */
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Typewriter text wrapper */
+        .typewriter-text {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-body-md antialiased selection:bg-surface-tint selection:text-background hover:bg-[#111111]">
+<!-- Cinematic Background Layers -->
+<!-- 3D Grid Base -->
+<div class="absolute inset-0 z-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:4rem_4rem] [transform:perspective(1000px)_rotateX(60deg)_translateY(-100px)_scale(2.5)] origin-top opacity-40 hover:opacity-60 transition-opacity duration-700"></div>
+<!-- Deep Space Vignette -->
+<div class="absolute inset-0 z-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#131313_80%)]"></div>
+<!-- Scanlines -->
+<div class="absolute inset-0 z-10 pointer-events-none opacity-10 hover:opacity-20 transition-opacity duration-500 mix-blend-overlay overflow-hidden">
+<div class="w-full h-[200%] bg-[linear-gradient(transparent_50%,rgba(0,0,0,0.8)_50%)] bg-[length:100%_4px] animate-scanline"></div>
+</div>
+<!-- Floating Particles Container -->
+<div id="particles-container"></div>
+<!-- Main Content Canvas (Safe Zone) -->
+<main class="relative z-20 flex flex-col items-center gap-widget-gap px-margin-mobile md:px-margin-desktop w-full max-w-5xl">
+<!-- Top Status Indicator -->
+<div class="glass-panel glass-sheen rounded-full px-4 py-2 flex items-center gap-3 shadow-[0_4px_20px_rgba(0,0,0,0.5)] hover:shadow-[0_4px_30px_rgba(0,254,135,0.3)] hover:scale-105 cursor-default">
+<div class="relative flex h-3 w-3">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed-dim opacity-75"></span>
+<span class="relative inline-flex rounded-full h-3 w-3 bg-tertiary-fixed-dim shadow-[0_0_8px_#00e479]"></span>
+</div>
+<span class="font-label-caps text-label-caps text-tertiary-fixed-dim tracking-[0.2em]">SYSTEM ONLINE</span>
+</div>
+<!-- 3D Volumetric Shield Logo -->
+<div class="relative w-64 h-64 flex items-center justify-center animate-float-slow mt-8 hover:scale-110 transition-transform duration-500">
+<!-- Background Glow Aura -->
+<div class="absolute inset-0 bg-surface-tint/20 rounded-full blur-[60px] animate-pulse-glow group-hover:bg-surface-tint/40"></div>
+<!-- Glass Hexagon Base & Core Icon -->
+<a href="/?booted=true" target="_parent" class="group relative px-8 py-4 bg-transparent overflow-hidden rounded-md border border-primary-fixed hover:border-white transition-colors duration-500 shadow-[0_0_20px_rgba(99,247,255,0.2)] hover:shadow-[0_0_40px_rgba(99,247,255,0.6)] cursor-pointer backdrop-blur-sm z-50 flex items-center justify-center" style="clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%); width: 150px; height: 150px;">
+    <span class="material-symbols-outlined text-[100px] text-surface-tint text-glow-cyan z-10 group-hover:text-white transition-colors duration-300" style="font-variation-settings: 'FILL' 1, 'wght' 200;">
+        shield_lock
+    </span>
+</a>
+<!-- Orbiting Nodes (Decorative) -->
+<div class="absolute w-full h-full animate-[spin_10s_linear_infinite] pointer-events-none hover:animate-[spin_5s_linear_infinite]">
+<div class="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary-fixed rounded-full shadow-[0_0_10px_#63f7ff]"></div>
+<div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-primary-fixed rounded-full shadow-[0_0_10px_#63f7ff]"></div>
+</div>
+</div>
+<!-- Headline with Slurred Glassmorphism -->
+<div class="flex flex-col items-center gap-2 text-center hover:-translate-y-2 transition-transform duration-300 relative z-30 px-12 py-6 rounded-3xl backdrop-blur-xl bg-black/10 border border-white/5 shadow-[0_0_40px_rgba(0,220,229,0.15)] mt-4">
+    <h1 class="font-headline-xl text-headline-xl text-primary-fixed text-glow-primary tracking-widest uppercase hover:text-white transition-colors duration-300">
+        AegisML
+    </h1>
+    <h2 class="font-headline-md text-headline-md text-on-surface-variant opacity-80 uppercase tracking-[0.3em] hover:opacity-100 transition-opacity duration-300">
+        Cyber Command
+    </h2>
+</div>
+<!-- Terminal Boot Sequence -->
+<div class="glass-panel glass-sheen rounded-xl p-6 w-full max-w-2xl mt-4 shadow-[0_20px_50px_rgba(0,0,0,0.6)] min-h-[160px] hover:shadow-[0_20px_60px_rgba(0,220,229,0.2)] transition-shadow duration-300 hover:scale-[1.02]">
+<div class="flex flex-col gap-2 font-data-num text-data-num text-surface-tint/80" id="terminal-output">
+<!-- Lines populated by JS with delayed typewriter animation -->
+<div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="typewriter-text animate-[typewriter_1s_steps(40,end)_forwards]">KERNEL VERSION 4.9.0-AEGIS LOADED.</span>
+</div>
+<div class="flex items-center gap-2 opacity-50 hover:opacity-100 transition-opacity duration-300">
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+<span class="typewriter-text animate-[typewriter_1s_steps(40,end)_1s_forwards]">ESTABLISHING NEURAL HANDSHAKE... [OK]</span>
+</div>
+<div class="flex items-center gap-2 mt-2 text-primary-fixed hover:text-white transition-colors duration-300">
+<span class="material-symbols-outlined text-[16px] animate-pulse">terminal</span>
+<span class="typewriter-text border-r-2 border-transparent animate-[typewriter_2s_steps(40,end)_2s_forwards,blinkCursor_0.75s_step-end_infinite] max-w-max">
+                        DECRYPTING KERNEL... AWAITING OPERATOR INPUT.
+                    </span>
+</div>
+</div>
+</div>
+<!-- Streamlit will inject a native button on top of this iframe -->
+</main>
+<!-- Lightweight JS for Atmosphere & Interaction -->
+<script>
+        // Generate floating data particles
+        const container = document.getElementById('particles-container');
+        const particleCount = 40;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            
+            // Random properties
+            const size = Math.random() * 4 + 1; // 1px to 5px
+            const left = Math.random() * 100; // 0% to 100vw
+            const top = Math.random() * 100 + 100; // Start below screen
+            const duration = Math.random() * 10 + 5; // 5s to 15s
+            const delay = Math.random() * 5; // 0s to 5s
+            
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particle.style.left = `${left}vw`;
+            particle.style.top = `${top}vh`;
+            particle.style.animationDuration = `${duration}s`;
+            particle.style.animationDelay = `${delay}s`;
+            
+            container.appendChild(particle);
+        }
+
+        // Ripple Effect Function
+        function createRipple(event) {
+            const button = event.currentTarget;
+            
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+            
+            // Calculate relative position based on viewport click
+            const rect = button.getBoundingClientRect();
+            const x = event.clientX - rect.left - radius;
+            const y = event.clientY - rect.top - radius;
+            
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${x}px`;
+            circle.style.top = `${y}px`;
+            circle.classList.add("ripple");
+            
+            // Remove existing ripples
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+            
+            button.appendChild(circle);
+            
+            // Redirect to Streamlit Dashboard after ripple animation
+            setTimeout(() => {
+                window.parent.location.href = "/?booted=true";
+            }, 500);
+        }
+
+        // --- THREE.JS 3D CYBER SPHERE ANIMATION ---
+        const initThreeJS = () => {
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            
+            // Render on top of background but behind content
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.domElement.style.position = 'absolute';
+            renderer.domElement.style.top = '0';
+            renderer.domElement.style.left = '0';
+            renderer.domElement.style.zIndex = '5'; // Above grid, below content
+            renderer.domElement.style.pointerEvents = 'none'; // Allow clicking through
+            document.body.insertBefore(renderer.domElement, document.querySelector('main'));
+
+            // Create Geometric Cyber Sphere
+            const geometry = new THREE.IcosahedronGeometry(2.5, 1);
+            
+            // Wireframe material glowing cyan
+            const material = new THREE.MeshBasicMaterial({ 
+                color: 0x00f5ff, 
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const sphere = new THREE.Mesh(geometry, material);
+            sphere.position.y = 0.5; // Shifted up for better alignment
+            scene.add(sphere);
+
+            // Particles around sphere
+            const particleGeo = new THREE.BufferGeometry();
+            const particleCount = 200;
+            const posArray = new Float32Array(particleCount * 3);
+            for(let i=0; i<particleCount*3; i++) {
+                posArray[i] = (Math.random() - 0.5) * 15;
+            }
+            particleGeo.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particleMat = new THREE.PointsMaterial({
+                size: 0.05,
+                color: 0xb44fff,
+                transparent: true,
+                opacity: 0.4
+            });
+            const particlesMesh = new THREE.Points(particleGeo, particleMat);
+            scene.add(particlesMesh);
+
+            camera.position.z = 7;
+
+            // Mouse interaction
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            // Animation Loop
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                targetX = mouseX * 0.001;
+                targetY = mouseY * 0.001;
+
+                // Smooth rotation towards mouse
+                sphere.rotation.y += 0.05 * (targetX - sphere.rotation.y);
+                sphere.rotation.x += 0.05 * (targetY - sphere.rotation.x);
+                
+                // Continuous slow rotation
+                sphere.rotation.z += 0.002;
+                particlesMesh.rotation.y -= 0.001;
+                particlesMesh.rotation.x += 0.0005;
+
+                // Pulsate sphere
+                const scale = 1 + Math.sin(Date.now() * 0.002) * 0.05;
+                sphere.scale.set(scale, scale, scale);
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // Handle Resize
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // Initialize 3D when DOM is ready
+        document.addEventListener('DOMContentLoaded', initThreeJS);
+
+        // --- TRAILING CURSOR EFFECT ---
+        const initCursorTrail = () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.style.position = 'fixed';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100vw';
+            canvas.style.height = '100vh';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '9999';
+            document.body.appendChild(canvas);
+
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const cursor = { x: width / 2, y: height / 2 };
+            const trail = [];
+            const trailLength = 20;
+
+            document.addEventListener('mousemove', (e) => {
+                cursor.x = e.clientX;
+                cursor.y = e.clientY;
+            });
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+
+            function animateTrail() {
+                ctx.clearRect(0, 0, width, height);
+
+                trail.push({ x: cursor.x, y: cursor.y });
+                if (trail.length > trailLength) trail.shift();
+
+                ctx.beginPath();
+                for (let i = 0; i < trail.length; i++) {
+                    const point = trail[i];
+                    if (i === 0) {
+                        ctx.moveTo(point.x, point.y);
+                    } else {
+                        // Smooth curve
+                        const prevPoint = trail[i - 1];
+                        const xc = (prevPoint.x + point.x) / 2;
+                        const yc = (prevPoint.y + point.y) / 2;
+                        ctx.quadraticCurveTo(prevPoint.x, prevPoint.y, xc, yc);
+                    }
+                }
+                ctx.lineTo(cursor.x, cursor.y);
+                
+                ctx.strokeStyle = 'rgba(0, 245, 255, 0.8)';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                
+                // Add glow to the trail
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#00f5ff';
+                
+                ctx.stroke();
+
+                requestAnimationFrame(animateTrail);
+            }
+            animateTrail();
+        };
+        initCursorTrail();
+
+    </script>
+</body></html>

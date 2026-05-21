@@ -1,76 +1,62 @@
-# AegisML — Real-Time Fraud Detection System
+# FraudDetection_AkulAttre
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
-![Build](https://img.shields.io/badge/build-passing-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-green)
+**Real-Time Fraud Detection System with Explainable AI & Live Dashboard**  
+Capstone — Week 4 | Submission: 25/05/2026
 
-AegisML is an enterprise-grade, end-to-end fraud detection platform engineered to process high-velocity financial transactions. It identifies anomalies and malicious activities in real-time, leveraging the IEEE-CIS Fraud Detection dataset. 
+## Project structure
 
-## Executive Summary
-This system goes beyond traditional binary classification by integrating advanced feature engineering, probability calibration, risk segmentation, and deep Explainable AI (SHAP). Designed for a fintech production environment, AegisML balances recall and precision to minimize financial losses while reducing false-positive friction for legitimate customers. 
-
-## System Architecture
-
-```text
-[ Data Sources ]
-      │
-      ├──> Batch Data (S3/GCS)
-      └──> Streaming Events (Kafka)
-               │
-               ▼
-  [ Real-Time Inference API ] <────────────── [ ML Training Pipeline ]
-    (FastAPI + Docker)                        - Missing Value Handling
-      - Payload Validation                    - Feature Engineering
-      - Online Feature Fetch                  - Target Encoding & Scaling
-      - Model Scoring                         - SMOTE Imbalance Handling
-      - Rule Engine Override                  - LightGBM / XGBoost
-               │                                       │
-               ▼                                       ▼
-[ Explainability & Risk Layer ]              [ Model Registry (MLflow) ]
-  - SHAP TreeExplainer
-  - Probability Calibration (Isotonic)
-  - Risk Tiers (Critical/Suspicious/Clear)
-               │
-               ▼
-     [ Decision Output ] ─────────────────> [ Monitoring & Retraining ]
-      (Block / Review / Allow)               - Data & Concept Drift
-               │
-               ▼
-[ Risk Ops Dashboard (Streamlit) ]
-  - KPI Overview & Financial Impact
-  - Transaction Explorer
-  - SHAP Global & Local Explainability
-  - Threshold Simulator
+```
+FraudDetection_AkulAttre/
+├── analysis.ipynb              # Jupyter notebook (Tasks 1–8)
+├── run_pipeline.py             # Full ML pipeline + Excel export
+├── FraudDetection_Results.xlsx # Model metrics, SHAP, risk tiers (Excel)
+├── data/
+│   ├── train_transaction.csv   # Download from Kaggle
+│   ├── train_identity.csv
+│   └── processed/scored_test.csv
+├── dashboard/
+│   ├── app.py
+│   └── model.pkl
+├── charts/
+├── model_comparison.png
+├── shap_summary.png
+├── summary.md
+└── requirements.txt
 ```
 
-## Setup & Quickstart
+## Quick start
 
-1. **Clone the repository** and navigate to the project root.
-2. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Download Data**: Place `train_transaction.csv` and `train_identity.csv` in `data/raw/`.
-4. **Run the Analysis Notebook**: Execute `notebooks/analysis.ipynb` to run the ML pipeline and generate models/charts.
-5. **Launch the Dashboard**:
-   ```bash
-   cd dashboard
-   streamlit run app.py
-   ```
-
-## Business Impact
-On the test set, the optimal LightGBM model achieves substantial cost savings:
-- **Projected Savings**: ~$504K on the test split.
-- **Annualized Savings**: Over $3M per year across the full transaction volume.
-- **Precision vs Recall**: Optimized to flag the top ~5% of transactions representing the highest risk.
-
-## Explainable AI (XAI)
-AegisML integrates SHAP (SHapley Additive exPlanations) to provide local and global interpretability. Operations analysts can view exactly why a transaction was flagged in the Streamlit dashboard via plain-English narrations and waterfall plots.
-
-## Deployment (API)
-AegisML includes a FastAPI service for sub-100ms real-time inference.
 ```bash
-cd src/inference
-uvicorn main:app --reload
+cd FraudDetection_AkulAttre
+pip install -r requirements.txt
 ```
-API Documentation available at `http://localhost:8000/docs`.
+
+1. Download [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection/data) files into `data/`.
+2. Run pipeline: `python run_pipeline.py`
+3. Open notebook: `jupyter notebook analysis.ipynb`
+4. Launch dashboard: `streamlit run dashboard/app.py`
+
+## Streamlit Cloud
+
+Deploy `dashboard/app.py` with root = `dashboard/`, add secrets if needed.  
+**Live URL:** https://aegisml-fraud-detection.streamlit.app/
+
+
+## Deliverables checklist
+
+| Item | Location |
+|------|----------|
+| analysis.ipynb | ✅ root |
+| data/ | ✅ + Kaggle CSVs |
+| dashboard/app.py | ✅ |
+| dashboard/model.pkl | ✅ after pipeline |
+| model_comparison.png | ✅ |
+| shap_summary.png | ✅ |
+| charts/ | ✅ |
+| Excel workbook | ✅ FraudDetection_Results.xlsx |
+| summary | ✅ summary.md |
+| requirements.txt | ✅ |
+
+## Submission
+
+https://docs.google.com/forms/d/e/1FAIpQLSeQbkVrKn_UM6eZ6JoK9oxa_cXb1DbsDoH87ap_8MRu_RU5Sw/viewform
