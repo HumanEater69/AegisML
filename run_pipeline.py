@@ -55,15 +55,15 @@ def load_and_merge() -> pd.DataFrame:
     test_id_path = DATA_RAW / "test_identity.csv"
     
     if txn_path.exists() and id_path.exists() and test_txn_path.exists() and test_id_path.exists():
-        print("Loading real IEEE-CIS train & test files (Deep Inject of ALL rows for rigorous modeling)...")
-        txn = pd.read_csv(txn_path)
-        idn = pd.read_csv(id_path)
+        print("Loading real IEEE-CIS train & test files (Deep Inject of 200k rows for rigorous modeling)...")
+        txn = pd.read_csv(txn_path, nrows=200000)
+        idn = pd.read_csv(id_path, nrows=200000)
         train_df = pd.merge(txn, idn, on="TransactionID", how="left")
         
         # Load test set as well to prove we're processing the 4 big files
         print("Processing test_transaction and test_identity...")
-        test_txn = pd.read_csv(test_txn_path)
-        test_idn = pd.read_csv(test_id_path)
+        test_txn = pd.read_csv(test_txn_path, nrows=50000)
+        test_idn = pd.read_csv(test_id_path, nrows=50000)
         test_df = pd.merge(test_txn, test_idn, on="TransactionID", how="left")
         
         # We save the test_df for later potential use, but return train_df for the main pipeline training
@@ -231,7 +231,15 @@ def task3_models(X_train, X_test, y_train, y_test):
     probas["IsolationForest"] = 1 - (raw - raw.min()) / (raw.max() - raw.min() + 1e-9)
     models["IsolationForest"] = iso
 
-    print("Running RandomizedSearchCV (20 trials)...")
+    print("Running RandomizedSearchCV on 40,000 sub-sampled rows...")
+    import numpy as np
+    sub_size = min(40000, len(X_train))
+    idx = np.random.choice(np.arange(len(X_train)), size=sub_size, replace=False)
+    if hasattr(X_train, 'iloc'):
+        X_train_sub, y_train_sub = X_train.iloc[idx], y_train.iloc[idx]
+    else:
+        X_train_sub, y_train_sub = X_train[idx], y_train[idx]
+
     search = RandomizedSearchCV(
         LGBMClassifier(random_state=42, verbose=-1),
         param_distributions={
@@ -241,14 +249,16 @@ def task3_models(X_train, X_test, y_train, y_test):
             "colsample_bytree": [0.7, 0.8, 1.0],
             "subsample": [0.7, 0.8, 1.0]
         },
-        n_iter=1,
+        n_iter=20,
         scoring="average_precision",
         cv=3,
         random_state=42,
         n_jobs=-1,
     )
-    search.fit(X_train, y_train)
+    search.fit(X_train_sub, y_train_sub)
+    print("Fitting final tuned LightGBM on FULL data...")
     tuned_lgbm = search.best_estimator_
+    tuned_lgbm.fit(X_train, y_train)
     tuned_proba = tuned_lgbm.predict_proba(X_test)[:, 1]
     
     base_m = eval_metrics(y_test, probas["LightGBM_Base"])

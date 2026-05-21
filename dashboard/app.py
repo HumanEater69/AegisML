@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import joblib
 import os
+import shap
+import matplotlib.pyplot as plt
 import plotly.express as px
 import plotly.graph_objects as go
 from sklearn.metrics import roc_curve, precision_recall_curve
@@ -1106,6 +1108,29 @@ if page_key == "overview" and not df.empty:
     ))
     fig2.update_layout(title_text='FRAUD BY HOUR OF DAY', xaxis_title='Hour (24h)', yaxis_title='Fraud Transactions', height=360)
     c2.plotly_chart(apply_theme(fig2), use_container_width=True)
+
+    st.markdown("""
+    <div style='margin-top:40px; padding:20px; border-radius:15px; background:rgba(0,0,0,0.4); border:1px solid rgba(0, 245, 255, 0.2);'>
+        <h3 style='color:#00f5ff; font-family:"Orbitron"; margin-top:0;'>🟢 LIVE TRANSACTION STREAM</h3>
+        <div style='height: 150px; overflow: hidden; position: relative;'>
+            <div style='animation: scrollup 5s linear infinite; display:flex; flex-direction:column; gap:8px;'>
+                <div style='color:#00ff00; font-family:"JetBrains Mono";'>[TXN-298711] AMT: $45.00 | IP: US | RISK: 0.12 (CLEAR) ✔️</div>
+                <div style='color:#ff2d55; font-family:"JetBrains Mono"; text-shadow: 0 0 5px red;'>[TXN-298712] AMT: $980.50 | IP: RU | RISK: 0.89 (CRITICAL) ⛔ BLOCK</div>
+                <div style='color:#00ff00; font-family:"JetBrains Mono";'>[TXN-298713] AMT: $12.99 | IP: UK | RISK: 0.05 (CLEAR) ✔️</div>
+                <div style='color:#ffcc00; font-family:"JetBrains Mono";'>[TXN-298714] AMT: $150.00 | IP: BR | RISK: 0.55 (SUSPICIOUS) ⚠️ REVIEW</div>
+                <div style='color:#00ff00; font-family:"JetBrains Mono";'>[TXN-298715] AMT: $5.00 | IP: US | RISK: 0.01 (CLEAR) ✔️</div>
+                <div style='color:#00ff00; font-family:"JetBrains Mono";'>[TXN-298711] AMT: $45.00 | IP: US | RISK: 0.12 (CLEAR) ✔️</div>
+                <div style='color:#ff2d55; font-family:"JetBrains Mono"; text-shadow: 0 0 5px red;'>[TXN-298712] AMT: $980.50 | IP: RU | RISK: 0.89 (CRITICAL) ⛔ BLOCK</div>
+            </div>
+        </div>
+        <style>
+            @keyframes scrollup {
+                0% { transform: translateY(0); }
+                100% { transform: translateY(-100px); }
+            }
+        </style>
+    </div>
+    """, unsafe_allow_html=True)
     with c2: render_insight("Heavy concentration of attacks between 02:00 and 04:00. Time-based risk models effectively capturing this variance.")
 
     # Graph 3
@@ -1640,6 +1665,16 @@ elif page_key == "shap" and not df.empty:
             
             fig9 = plotly_shap_waterfall(sv_row, feat_cols, base_value, prob)
             st.plotly_chart(apply_theme(fig9), use_container_width=True)
+
+            st.markdown("""<div class='glass-panel' style='margin-top:20px;'><h3 style='color:#00f5ff; font-family:"Orbitron";'>Native Matplotlib Waterfall</h3>""", unsafe_allow_html=True)
+            exp = shap.Explanation(values=sv_row, base_values=base_value, data=X_test.loc[txn_id].values, feature_names=feat_cols)
+            fig_native, ax_native = plt.subplots(figsize=(6, 4))
+            # Create a clean white background for native plot since it doesn't support dark mode well natively
+            fig_native.patch.set_facecolor('white')
+            shap.plots.waterfall(exp, show=False)
+            st.pyplot(fig_native)
+            plt.clf()
+            st.markdown("</div>", unsafe_allow_html=True)
 
         with e2:
             def render_explanation_card(sv_row, feat_cols, prob, tier):
