@@ -499,6 +499,7 @@ div[data-testid="stRadio"] label[data-checked="true"] {
   color: #00ff00 !important;
   font-weight: 600 !important;
 }
+div[data-testid="stRadio"] [data-baseweb="radio"] > div:first-child { display: none !important; }
 div[data-testid="stRadio"] label div[role="radio"] { display: none !important; }
 
 
@@ -2133,6 +2134,12 @@ elif page_key == "threat":
             top_fraud = df.sort_values(by="FraudProbability", ascending=False).head(100)
         else:
             top_fraud = df.head(100)
+            
+        # Recover email & device info (dropped in scored_test.csv)
+        raw_df_path = _PROJECT_DIR / 'data' / 'processed' / 'test_merged_sample.csv'
+        if raw_df_path.exists():
+            raw_df = pd.read_csv(raw_df_path, usecols=['TransactionID', 'P_emaildomain', 'DeviceInfo'])
+            top_fraud = top_fraud.merge(raw_df, on='TransactionID', how='left')
             
         G = nx.Graph()
         
