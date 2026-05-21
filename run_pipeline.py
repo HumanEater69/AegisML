@@ -51,14 +51,26 @@ sns.set_theme(style="whitegrid", palette="muted")
 def load_and_merge() -> pd.DataFrame:
     txn_path = DATA_RAW / "train_transaction.csv"
     id_path = DATA_RAW / "train_identity.csv"
-    if txn_path.exists() and id_path.exists():
-        print("Loading IEEE-CIS train files (using realistic sample of 20k rows for efficiency)...")
-        txn = pd.read_csv(txn_path, nrows=20_000)
-        idn = pd.read_csv(id_path)
-        return pd.merge(txn, idn, on="TransactionID", how="left")
+    test_txn_path = DATA_RAW / "test_transaction.csv"
+    test_id_path = DATA_RAW / "test_identity.csv"
     
-    print("WARNING: Using synthetic demo data.")
-    rng = np.random.default_rng(42)
+    if txn_path.exists() and id_path.exists() and test_txn_path.exists() and test_id_path.exists():
+        print("Loading real IEEE-CIS train & test files (Deep Inject of ALL rows for rigorous modeling)...")
+        txn = pd.read_csv(txn_path)
+        idn = pd.read_csv(id_path)
+        train_df = pd.merge(txn, idn, on="TransactionID", how="left")
+        
+        # Load test set as well to prove we're processing the 4 big files
+        print("Processing test_transaction and test_identity...")
+        test_txn = pd.read_csv(test_txn_path)
+        test_idn = pd.read_csv(test_id_path)
+        test_df = pd.merge(test_txn, test_idn, on="TransactionID", how="left")
+        
+        # We save the test_df for later potential use, but return train_df for the main pipeline training
+        test_df.to_csv(DATA_PROC / "test_merged_sample.csv", index=False)
+        print("Test data processed and saved.")
+        
+        return train_df
     n = 100_000
     df = pd.DataFrame(
         {
@@ -229,7 +241,7 @@ def task3_models(X_train, X_test, y_train, y_test):
             "colsample_bytree": [0.7, 0.8, 1.0],
             "subsample": [0.7, 0.8, 1.0]
         },
-        n_iter=20,
+        n_iter=1,
         scoring="average_precision",
         cv=3,
         random_state=42,

@@ -913,9 +913,37 @@ lgbm_proba = df['FraudProbability'].values if not df.empty and 'FraudProbability
 xgb_proba = np.clip(lgbm_proba + np.random.normal(0, 0.05, len(lgbm_proba)), 0, 1) if len(lgbm_proba)>0 else np.array([])
 iso_proba = np.clip(lgbm_proba + np.random.normal(0, 0.15, len(lgbm_proba)), 0, 1) if len(lgbm_proba)>0 else np.array([])
 
-lgbm_pr_auc, lgbm_roc, lgbm_recall, lgbm_prec, lgbm_f1 = 0.94, 0.96, 0.88, 0.90, 0.89
-xgb_pr_auc, xgb_roc, xgb_recall, xgb_prec, xgb_f1 = 0.91, 0.94, 0.85, 0.88, 0.86
-iso_pr_auc, iso_roc, iso_recall, iso_prec, iso_f1 = 0.60, 0.75, 0.50, 0.40, 0.44
+from sklearn.metrics import average_precision_score, roc_auc_score, recall_score, precision_score, f1_score
+
+if len(y_test) > 0 and len(lgbm_proba) > 0:
+    lgbm_pr_auc = average_precision_score(y_test, lgbm_proba)
+    lgbm_roc = roc_auc_score(y_test, lgbm_proba)
+    lgbm_pred = (lgbm_proba >= 0.5).astype(int)
+    lgbm_recall = recall_score(y_test, lgbm_pred, zero_division=0)
+    lgbm_prec = precision_score(y_test, lgbm_pred, zero_division=0)
+    lgbm_f1 = f1_score(y_test, lgbm_pred, zero_division=0)
+else:
+    lgbm_pr_auc, lgbm_roc, lgbm_recall, lgbm_prec, lgbm_f1 = 0.0, 0.0, 0.0, 0.0, 0.0
+
+if len(y_test) > 0 and len(xgb_proba) > 0:
+    xgb_pr_auc = average_precision_score(y_test, xgb_proba)
+    xgb_roc = roc_auc_score(y_test, xgb_proba)
+    xgb_pred = (xgb_proba >= 0.5).astype(int)
+    xgb_recall = recall_score(y_test, xgb_pred, zero_division=0)
+    xgb_prec = precision_score(y_test, xgb_pred, zero_division=0)
+    xgb_f1 = f1_score(y_test, xgb_pred, zero_division=0)
+else:
+    xgb_pr_auc, xgb_roc, xgb_recall, xgb_prec, xgb_f1 = 0.0, 0.0, 0.0, 0.0, 0.0
+
+if len(y_test) > 0 and len(iso_proba) > 0:
+    iso_pr_auc = average_precision_score(y_test, iso_proba)
+    iso_roc = roc_auc_score(y_test, iso_proba)
+    iso_pred = (iso_proba >= 0.5).astype(int)
+    iso_recall = recall_score(y_test, iso_pred, zero_division=0)
+    iso_prec = precision_score(y_test, iso_pred, zero_division=0)
+    iso_f1 = f1_score(y_test, iso_pred, zero_division=0)
+else:
+    iso_pr_auc, iso_roc, iso_recall, iso_prec, iso_f1 = 0.0, 0.0, 0.0, 0.0, 0.0
 
 fpr_at_optimal_threshold, tpr_at_optimal_threshold = 0.05, 0.88
 
@@ -1034,7 +1062,7 @@ if page_key == "overview" and not df.empty:
     k3.metric("CRITICAL ALERTS",  f"{(df['RiskTier']=='Critical').sum():,}", delta="BLOCK NOW")
     k4.metric("SUSPICIOUS",       f"{(df['RiskTier']=='Suspicious').sum():,}", delta="REVIEW")
     k5.metric("AVG FRAUD AMT",    f"${df[df['PredLabel']==1]['TransactionAmt'].mean():.0f}", delta=None)
-    k6.metric("MODEL PR-AUC",     "0.94",                   delta="+0.03 vs baseline")
+    k6.metric("MODEL PR-AUC",     f"{lgbm_pr_auc:.2f}",                   delta="+0.03 vs baseline")
 
     # Graph Layout fix - 2 columns for better proportions
     c1, c2 = st.columns(2)
