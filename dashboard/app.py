@@ -2192,7 +2192,7 @@ elif page_key == "threat":
         fig_graph = go.Figure(data=[edge_trace, node_trace],
                               layout=go.Layout(
                                   title="<br>Entity Linkage (Top 100 Critical Threats)",
-                                  titlefont=dict(size=18, color='#00f5ff', family='Orbitron'),
+                                  title_font=dict(size=18, color='#00f5ff', family='Orbitron'),
                                   showlegend=False,
                                   hovermode='closest',
                                   margin=dict(b=20,l=5,r=5,t=40),
