@@ -199,6 +199,83 @@
             white-space: nowrap;
             width: 0;
         }
+
+        /* Liquid Glass Title Container */
+        .liquid-glass-title {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(0,220,229,0.05) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 220, 229, 0.2), inset 0 0 15px rgba(0, 220, 229, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 20px 40px;
+            transition: all 0.4s ease;
+        }
+        .liquid-glass-title:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(0, 220, 229, 0.4), inset 0 0 25px rgba(0, 220, 229, 0.3);
+            border-color: rgba(99, 247, 255, 0.6);
+        }
+
+        /* Cyber War Glitch Effect */
+        .glitch-text {
+            position: relative;
+            color: #fff;
+            display: inline-block;
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+        .glitch-text::before {
+            left: 2px;
+            text-shadow: -2px 0 #ff00c1;
+            clip: rect(24px, 550px, 90px, 0);
+            animation: glitch-anim 3s infinite linear alternate-reverse;
+        }
+        .glitch-text::after {
+            left: -2px;
+            text-shadow: -2px 0 #00fff9;
+            clip: rect(85px, 550px, 140px, 0);
+            animation: glitch-anim 2.5s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(10px, 9999px, 86px, 0); transform: skew(0.8deg); }
+            5% { clip: rect(62px, 9999px, 12px, 0); transform: skew(0.5deg); }
+            10% { clip: rect(7px, 9999px, 99px, 0); transform: skew(0.1deg); }
+            15% { clip: rect(98px, 9999px, 73px, 0); transform: skew(0.7deg); }
+            20% { clip: rect(44px, 9999px, 98px, 0); transform: skew(0.3deg); }
+            25% { clip: rect(17px, 9999px, 50px, 0); transform: skew(0.1deg); }
+            30% { clip: rect(81px, 9999px, 66px, 0); transform: skew(0.5deg); }
+            35% { clip: rect(54px, 9999px, 21px, 0); transform: skew(0.7deg); }
+            40% { clip: rect(32px, 9999px, 77px, 0); transform: skew(0.6deg); }
+            45% { clip: rect(90px, 9999px, 88px, 0); transform: skew(0.1deg); }
+            50% { clip: rect(22px, 9999px, 14px, 0); transform: skew(0.8deg); }
+            55% { clip: rect(40px, 9999px, 63px, 0); transform: skew(0.9deg); }
+            60% { clip: rect(70px, 9999px, 35px, 0); transform: skew(0.2deg); }
+            65% { clip: rect(58px, 9999px, 45px, 0); transform: skew(0.4deg); }
+            70% { clip: rect(29px, 9999px, 55px, 0); transform: skew(0.6deg); }
+            75% { clip: rect(95px, 9999px, 25px, 0); transform: skew(0.2deg); }
+            80% { clip: rect(48px, 9999px, 80px, 0); transform: skew(0.9deg); }
+            85% { clip: rect(15px, 9999px, 92px, 0); transform: skew(0.5deg); }
+            90% { clip: rect(86px, 9999px, 10px, 0); transform: skew(0.7deg); }
+            95% { clip: rect(66px, 9999px, 70px, 0); transform: skew(0.3deg); }
+            100% { clip: rect(35px, 9999px, 28px, 0); transform: skew(0.1deg); }
+        }
+
+        .liquid-text {
+            background: linear-gradient(180deg, #ffffff 0%, #63f7ff 40%, #00dce5 80%, rgba(0, 220, 229, 0.3) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 15px rgba(0, 220, 229, 0.8));
+        }
     </style>
 </head>
 <body class="bg-background text-on-surface min-h-screen relative overflow-hidden flex flex-col items-center justify-center font-body-md antialiased selection:bg-surface-tint selection:text-background hover:bg-[#111111]">
@@ -240,11 +317,11 @@
 </div>
 </div>
 <!-- Cinematic Title Top Left -->
-<div class="fixed top-8 left-12 z-50 flex flex-col items-start gap-1">
-    <h1 class="font-headline-xl text-[5rem] font-bold italic text-primary-fixed text-glow-primary tracking-widest uppercase drop-shadow-[0_0_30px_rgba(0,220,229,0.8)]">
+<div class="fixed top-8 left-12 z-50 flex flex-col items-start gap-1 liquid-glass-title">
+    <h1 class="font-headline-xl text-[5rem] font-bold italic tracking-widest uppercase glitch-text liquid-text" data-text="AegisML">
         AegisML
     </h1>
-    <h2 class="font-headline-md text-2xl font-bold italic text-white opacity-90 uppercase tracking-[0.4em] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]">
+    <h2 class="font-headline-md text-2xl font-bold italic text-white opacity-90 uppercase tracking-[0.4em] drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] glitch-text" data-text="Cyber Command" style="animation-delay: 0.5s;">
         Cyber Command
     </h2>
 </div>

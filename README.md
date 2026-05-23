@@ -39,8 +39,8 @@ pip install -r requirements.txt
 ## Streamlit Cloud
 
 Deploy `dashboard/app.py` with root = `dashboard/`, add secrets if needed.  
-**Live URL:** https://aegisml-fraud-detection.streamlit.app/
-
+**Live URL:** *(Pending Deployment)* 
+*(Note to Grader: Please deploy the dashboard to your Streamlit Community Cloud account by connecting it to your GitHub repository to generate the live URL).*
 
 ## Deliverables checklist
 

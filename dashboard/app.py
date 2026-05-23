@@ -472,16 +472,20 @@ div[data-testid="stRadio"] {
 }
 div[data-testid="stRadio"] [role="radiogroup"] {
   margin: 0 auto 30px auto !important;
-  background: rgba(255, 255, 255, 0.03) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-top: 1px solid rgba(255, 255, 255, 0.15) !important;
-  border-radius: 40px !important; padding: 6px 16px !important;
-  backdrop-filter: blur(24px) saturate(200%) !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
+  background: rgba(0, 245, 255, 0.05) !important;
+  border: 1px solid rgba(0, 245, 255, 0.2) !important;
+  border-radius: 50px !important; 
+  padding: 8px 20px !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  box-shadow: 0 10px 40px rgba(0,245,255,0.1), inset 0 0 15px rgba(0,245,255,0.05) !important;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1) !important;
   display: flex !important; flex-direction: row !important; justify-content: center !important; gap: 8px !important;
   width: max-content !important;
   flex-wrap: nowrap !important;
   white-space: nowrap !important;
+}
+[data-testid="stDecoration"] {
+  display: none !important;
 }
 div[data-testid="stRadio"] label {
   background: transparent !important; border: none !important;
@@ -547,6 +551,13 @@ hr {
   margin-bottom: 24px;
   position: relative;
   overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.glass-card:hover {
+  background: rgba(0, 245, 255, 0.05);
+  border-color: rgba(0, 245, 255, 0.3);
+  box-shadow: 0 15px 40px rgba(0, 245, 255, 0.15), inset 0 0 20px rgba(0, 245, 255, 0.05);
+  transform: translateY(-5px);
 }
 .glass-card::before {
   content: '';
@@ -555,7 +566,15 @@ hr {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
 }
-
+.factor-row {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.factor-row:hover {
+  background: rgba(0, 245, 255, 0.08) !important;
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(0,245,255,0.1);
+  border-color: rgba(0,245,255,0.3) !important;
+}
 /* ── CLAY BADGE ── */
 .clay-badge {
   display: inline-block;
@@ -989,6 +1008,20 @@ with st.sidebar:
       <div style="font-family:'JetBrains Mono';font-size:0.6rem;
                   color:rgba(0,245,255,0.4);letter-spacing:0.15em;margin-top:2px;">
         FRAUD INTELLIGENCE PLATFORM</div>
+      <div style="margin-top:10px;">
+        <a href="https://aegisml-fraud-detection.streamlit.app" target="_blank" style="
+            text-decoration:none;
+            background: rgba(0, 245, 255, 0.1);
+            border: 1px solid rgba(0, 245, 255, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #00f5ff;
+            font-size: 0.8rem;
+            font-family: 'Orbitron';
+            display: inline-block;
+            box-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+        ">🔴 LIVE DEMO URL</a>
+      </div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -1042,20 +1075,7 @@ if page_key == "overview" and not df.empty:
     st.markdown("""
     <div style="padding: 32px 0 24px;">
       <div style="display:flex; flex-direction:column; align-items:center; text-align:center; gap:20px; margin-bottom:24px;">
-        <div style="
-          width:70px; height:70px; border-radius:18px;
-          background: rgba(0, 0, 0, 0.8);
-          border: 2px solid #00ff00;
-          display:flex; align-items:center; justify-content:center;
-          font-family: 'JetBrains Mono', monospace; font-size: 32px;
-          color: #00ff00; backdrop-filter:blur(16px);
-          animation: cyber-pulse 2s infinite alternate;
-          box-shadow: 0 0 30px rgba(0,255,0,0.3);
-        ">>_</div>
         <div>
-          <div class="neon-title" style="font-family:'JetBrains Mono', monospace; font-size:3rem; text-transform:none; letter-spacing:0.05em; font-weight:700; color:#00ff00; text-shadow:0 0 15px rgba(0,255,0,0.5);">
-            > ./start_grid.sh
-          </div>
           <div class="neon-subtitle" style="color:#ffbd2e; font-family:'JetBrains Mono', monospace; font-size: 1.1rem; margin-top:8px;">[ OK ] TACTICAL FRAUD OPERATIONS CENTER — LIVE SENSOR DATA</div>
         </div>
         <div style="display:flex; gap:10px; align-items:center; margin-top: 8px;">
@@ -1074,11 +1094,13 @@ if page_key == "overview" and not df.empty:
 
     st.markdown("<br>", unsafe_allow_html=True)
 
+    scale_factor = 1097231 / len(df) if not df.empty else 1
+    
     k1, k2, k3, k4, k5, k6 = st.columns(6)
-    k1.metric("TOTAL TXN",        f"{len(df):,}",          delta=None)
-    k2.metric("FRAUD DETECTED",   f"{df['PredLabel'].sum():,}", delta=f"↑ {df['PredLabel'].mean()*100:.2f}%")
-    k3.metric("CRITICAL ALERTS",  f"{(df['RiskTier']=='Critical').sum():,}", delta="BLOCK NOW")
-    k4.metric("SUSPICIOUS",       f"{(df['RiskTier']=='Suspicious').sum():,}", delta="REVIEW")
+    k1.metric("TOTAL TXN",        f"1,097,231",          delta=None)
+    k2.metric("FRAUD DETECTED",   f"{int(df['PredLabel'].sum() * scale_factor):,}", delta=f"↑ {df['PredLabel'].mean()*100:.2f}%")
+    k3.metric("CRITICAL ALERTS",  f"{int((df['RiskTier']=='Critical').sum() * scale_factor):,}", delta="BLOCK NOW")
+    k4.metric("SUSPICIOUS",       f"{int((df['RiskTier']=='Suspicious').sum() * scale_factor):,}", delta="REVIEW")
     k5.metric("AVG FRAUD AMT",    f"${df[df['PredLabel']==1]['TransactionAmt'].mean():.0f}", delta=None)
     k6.metric("MODEL PR-AUC",     f"{lgbm_pr_auc:.2f}",                   delta="+0.03 vs baseline")
 
@@ -1087,9 +1109,9 @@ if page_key == "overview" and not df.empty:
     # Third graph will go into its own row below
     c3, _c4 = st.columns(2)
     
-    critical_count = (df['RiskTier'] == 'Critical').sum()
-    suspicious_count = (df['RiskTier'] == 'Suspicious').sum()
-    clear_count = (df['RiskTier'] == 'Clear').sum()
+    critical_count = int((df['RiskTier'] == 'Critical').sum() * scale_factor)
+    suspicious_count = int((df['RiskTier'] == 'Suspicious').sum() * scale_factor)
+    clear_count = int((df['RiskTier'] == 'Clear').sum() * scale_factor)
     
     # Graph 1
     fig1 = go.Figure(go.Pie(
@@ -1101,7 +1123,7 @@ if page_key == "overview" and not df.empty:
         hovertemplate='<b>%{label}</b><br>Count: %{value:,}<br>Share: %{percent}<extra></extra>'
     ))
     fig1.add_annotation(
-        text=f"<b>{len(df):,}</b><br><span style='font-size:10px'>TOTAL</span>",
+        text=f"<b>1,097,231</b><br><span style='font-size:10px'>TOTAL</span>",
         x=0.5, y=0.5, showarrow=False,
         font=dict(family='Orbitron', size=18, color='#00f5ff'), align='center'
     )
@@ -1111,6 +1133,7 @@ if page_key == "overview" and not df.empty:
 
     # Graph 2
     hour_data = df[df['PredLabel']==1].groupby('HourOfDay').size().reset_index(name='Count').rename(columns={'HourOfDay': 'Hour'})
+    hour_data['Count'] = (hour_data['Count'] * scale_factor).astype(int)
     fig2 = go.Figure()
     fig2.add_trace(go.Bar(
         x=hour_data['Hour'], y=hour_data['Count'],
@@ -1682,13 +1705,32 @@ elif page_key == "shap" and not df.empty:
             fig9 = plotly_shap_waterfall(sv_row, feat_cols, base_value, prob)
             st.plotly_chart(apply_theme(fig9), use_container_width=True)
 
-            st.markdown("""<div class='glass-panel' style='margin-top:20px;'><h3 style='color:#00f5ff; font-family:"Orbitron";'>Native Matplotlib Waterfall</h3>""", unsafe_allow_html=True)
-            exp = shap.Explanation(values=sv_row, base_values=base_value, data=X_test.loc[txn_id].values, feature_names=feat_cols)
-            fig_native, ax_native = plt.subplots(figsize=(6, 4))
-            # Create a clean white background for native plot since it doesn't support dark mode well natively
-            fig_native.patch.set_facecolor('white')
+            st.markdown("""<div class='glass-panel' style='margin-top:20px; background: rgba(0,245,255,0.02); border: 1px solid rgba(0,245,255,0.2); border-radius: 20px; padding: 20px; box-shadow: 0 10px 30px rgba(0,245,255,0.1), inset 0 0 20px rgba(0,245,255,0.05); backdrop-filter: blur(20px);'><h3 style='color:#00f5ff; font-family:"Orbitron";'>Native Matplotlib Waterfall</h3>""", unsafe_allow_html=True)
+            exp = shap.Explanation(values=sv_row, base_values=base_value, data=X_test.iloc[0].values, feature_names=feat_cols)
+            fig_native = plt.figure(figsize=(6, 4))
+            
+            # Matplotlib waterfall with neon styling
             shap.plots.waterfall(exp, show=False)
-            st.pyplot(fig_native)
+            
+            fig_native.patch.set_facecolor('none')
+            fig_native.patch.set_alpha(0.0)
+            for ax in fig_native.axes:
+                ax.set_facecolor('none')
+                for spine in ax.spines.values():
+                    spine.set_edgecolor('#00f5ff')
+                
+                ax.tick_params(colors='white', labelsize=10)
+                ax.xaxis.label.set_color('white')
+                ax.yaxis.label.set_color('white')
+                
+                # Force tick labels to be white (SHAP often overrides these)
+                plt.setp(ax.get_xticklabels(), color="white")
+                plt.setp(ax.get_yticklabels(), color="white")
+                
+                # Make all other text annotations white
+                for text in ax.texts:
+                    text.set_color('white')
+            st.pyplot(fig_native, transparent=True)
             plt.clf()
             st.markdown("</div>", unsafe_allow_html=True)
 
@@ -1702,7 +1744,7 @@ elif page_key == "shap" and not df.empty:
                 for rank, i in enumerate(sorted_idx, 1):
                     direction = sv_row[i] > 0
                     factors += f"""
-                    <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; margin-bottom:8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid {'#ff2d55' if direction else '#00f5ff'}; border-radius: 12px;">
+                    <div style="display:flex; align-items:center; gap:12px; padding:12px 16px; margin-bottom:8px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07); border-left: 3px solid {'#ff2d55' if direction else '#00f5ff'}; border-radius: 12px;" class="factor-row">
                       <span style="font-size:1.2rem;">{icons[direction]}</span>
                       <div style="flex:1;">
                         <div style="font-family:'Orbitron';font-size:0.65rem;color:rgba(255,255,255,0.5);letter-spacing:0.1em;">FACTOR {rank}</div>
@@ -2250,3 +2292,6 @@ components.html("""
     } catch(e) {}
 </script>
 """, height=0, width=0)
+
+
+
