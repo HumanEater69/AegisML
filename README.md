@@ -1,62 +1,59 @@
-# FraudDetection_AkulAttre
+# AegisML
 
-**Real-Time Fraud Detection System with Explainable AI & Live Dashboard**  
-Capstone — Week 4 | Submission: 25/05/2026
+**Real-Time Fraud Detection System with Explainable AI & Live Dashboard**
 
-## Project structure
+## Overview
+AegisML is an enterprise-grade fraud detection engine built to identify anomalous financial transactions with high precision. By combining robust machine learning models (LightGBM, XGBoost, Isolation Forest) with SHAP-based Explainable AI (XAI), AegisML not only stops fraud in its tracks but provides clear, actionable reasoning for every blocked transaction.
 
-```
-FraudDetection_AkulAttre/
-├── analysis.ipynb              # Jupyter notebook (Tasks 1–8)
-├── run_pipeline.py             # Full ML pipeline + Excel export
-├── FraudDetection_Results.xlsx # Model metrics, SHAP, risk tiers (Excel)
-├── data/
-│   ├── train_transaction.csv   # Download from Kaggle
-│   ├── train_identity.csv
-│   └── processed/scored_test.csv
-├── dashboard/
-│   ├── app.py
-│   └── model.pkl
-├── charts/
-├── model_comparison.png
-├── shap_summary.png
-├── summary.md
-└── requirements.txt
-```
+## Key Features
+- **High-Performance ML Pipeline**: Automated preprocessing, class balancing via SMOTE, and hyperparameter tuning utilizing Optuna.
+- **Explainable AI (XAI)**: Native integration of SHAP values to explain feature importance globally and per-transaction.
+- **Interactive Command Center**: A sleek, glassmorphic Streamlit dashboard for real-time monitoring, transaction lookup, and risk-tier visualization.
+- **Comprehensive Reporting**: Automatically exports model metrics, SHAP top features, and business insights to an interactive Excel workbook.
 
-## Quick start
-
-```bash
-cd FraudDetection_AkulAttre
-pip install -r requirements.txt
+## Project Structure
+```text
+AegisML/
+├── analysis.ipynb              # Exploratory Data Analysis & Modeling Notebook
+├── run_pipeline.py             # End-to-end ML pipeline & Excel export script
+├── FraudDetection_Results.xlsx # Automated model insights and business metrics
+├── data/                       # Directory for raw and processed datasets
+├── dashboard/                  # Streamlit application components
+│   ├── app.py                  # Main dashboard script
+│   └── model.pkl               # Serialized ML model
+├── charts/                     # Generated evaluation plots and SHAP waterfalls
+└── requirements.txt            # Python dependencies
 ```
 
-1. Download [IEEE-CIS Fraud Detection](https://www.kaggle.com/c/ieee-fraud-detection/data) files into `data/`.
-2. Run pipeline: `python run_pipeline.py`
-3. Open notebook: `jupyter notebook analysis.ipynb`
-4. Launch dashboard: `streamlit run dashboard/app.py`
+## Getting Started
 
-## Streamlit Cloud
+### Prerequisites
+- Python 3.9+
+- The IEEE-CIS Fraud Detection dataset (download from Kaggle and place inside `data/`).
 
-Deploy `dashboard/app.py` with root = `dashboard/`, add secrets if needed.  
-**Live URL:** *(Pending Deployment)* 
-*(Note to Grader: Please deploy the dashboard to your Streamlit Community Cloud account by connecting it to your GitHub repository to generate the live URL).*
+### Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/HumanEater69/AegisML.git
+   cd AegisML
+   ```
+2. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Deliverables checklist
+### Usage
+1. **Run the Pipeline**: Execute the full modeling pipeline to train the model and generate reports.
+   ```bash
+   python run_pipeline.py
+   ```
+2. **Launch the Dashboard**: Start the interactive command center.
+   ```bash
+   streamlit run dashboard/app.py
+   ```
 
-| Item | Location |
-|------|----------|
-| analysis.ipynb | ✅ root |
-| data/ | ✅ + Kaggle CSVs |
-| dashboard/app.py | ✅ |
-| dashboard/model.pkl | ✅ after pipeline |
-| model_comparison.png | ✅ |
-| shap_summary.png | ✅ |
-| charts/ | ✅ |
-| Excel workbook | ✅ FraudDetection_Results.xlsx |
-| summary | ✅ summary.md |
-| requirements.txt | ✅ |
-
-## Submission
-
-https://docs.google.com/forms/d/e/1FAIpQLSeQbkVrKn_UM6eZ6JoK9oxa_cXb1DbsDoH87ap_8MRu_RU5Sw/viewform
+## Architecture
+- **Models**: LightGBM (Primary), XGBoost, Isolation Forest
+- **Data Processing**: Pandas, Scikit-learn
+- **Visualization**: Matplotlib, Plotly, Seaborn, Streamlit
+- **Explainability**: SHAP
