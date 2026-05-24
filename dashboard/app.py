@@ -14,6 +14,17 @@ import streamlit.components.v1 as components
 _APP_DIR = Path(__file__).resolve().parent
 _PROJECT_DIR = _APP_DIR.parent
 
+# --- STREAMLIT CLOUD FALLBACK ---
+csv_path = _PROJECT_DIR / 'data' / 'processed' / 'scored_test.csv'
+if not csv_path.exists():
+    os.makedirs(csv_path.parent, exist_ok=True)
+    pd.DataFrame({
+        'TransactionID': range(100), 'FraudProbability': [0.02]*100,
+        'TrueLabel': [0]*100, 'RiskTier': ['Clear']*100,
+        'TransactionAmt': [50.0]*100, 'HourOfDay': [12]*100
+    }).to_csv(csv_path, index=False)
+# --------------------------------
+
 st.set_page_config(page_title="AegisML | Cyber Command", layout="wide", initial_sidebar_state="collapsed")
 
 # ── LANDING PAGE INJECTION ──
