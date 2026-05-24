@@ -5,6 +5,8 @@
 ## Overview
 AegisML is an enterprise-grade fraud detection engine built to identify anomalous financial transactions with high precision. By combining robust machine learning models (LightGBM, XGBoost, Isolation Forest) with SHAP-based Explainable AI (XAI), AegisML not only stops fraud in its tracks but provides clear, actionable reasoning for every blocked transaction.
 
+**🔴 Live Dashboard:** [https://aegisml.streamlit.app/](https://aegisml.streamlit.app/)
+
 ## Key Features
 - **High-Performance ML Pipeline**: Automated preprocessing, class balancing via SMOTE, and hyperparameter tuning utilizing Optuna.
 - **Explainable AI (XAI)**: Native integration of SHAP values to explain feature importance globally and per-transaction.
